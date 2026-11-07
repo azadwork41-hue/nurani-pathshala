@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="bn"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>নূরানী পাঠশালা</title>
+<style>
+:root{--g:#0d5c46;--g2:#1a9c78;--y:#f5c542;--bg:#fff6dc;--ink:#1d2b26;--card:#fff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10241d;--ink:#f3efe0;--card:#1b3a2f}}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans Bengali","Kalpurush",system-ui,sans-serif;min-height:100vh}
+#splash{position:fixed;inset:0;z-index:9;background:linear-gradient(#0a4234,#1f9f7b);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;transition:opacity .6s}
+#splash .bis{font-size:30px;color:var(--y);font-family:"Amiri","Scheherazade New",serif}
+#splash h1{margin:6px 0 0;font-size:34px}
+header{position:sticky;top:env(safe-area-inset-top,0px);background:var(--g);color:#fff;padding:14px 16px;display:flex;align-items:center;gap:10px;font-size:20px;font-weight:700;z-index:5}
+header button{background:none;border:0;color:#fff;font-size:24px}
+main{padding:14px;max-width:640px;margin:auto}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.c{border:0;border-radius:24px;overflow:hidden;background:var(--card);box-shadow:0 4px 12px #0003;padding:0;text-align:center;color:#fff;font:inherit}
+.c .i{height:110px;display:flex;align-items:center;justify-content:center;font-size:56px}
+.c .t{padding:14px 6px;font-size:19px;font-weight:700}
+.row{display:flex;align-items:center;gap:10px;background:var(--card);border-radius:16px;padding:12px 14px;margin:0 0 10px;box-shadow:0 2px 6px #0002;font-size:19px;border:0;width:100%;color:var(--ink);font-family:inherit;text-align:left}
+.row b{flex:1}
+.ar{font-family:"Amiri","Scheherazade New",serif;font-size:30px;direction:rtl;line-height:1.9;text-align:right}
+.sp{background:var(--y);border:0;border-radius:50%;width:44px;height:44px;font-size:20px;flex:none}
+.l{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.l button{background:var(--card);color:var(--ink);border:2px solid var(--y);border-radius:16px;padding:8px 0;font-family:"Amiri",serif;font-size:34px}
+.l small{display:block;font:13px system-ui,sans-serif}
+.note{background:#f5c54233;border-radius:12px;padding:10px;font-size:14px;margin-top:14px}
+.p{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}.p span{background:var(--card);border-radius:10px;padding:10px 0;text-align:center;opacity:.55}
+main{padding-bottom:100px}
+.row.on,.l button.on{outline:4px solid var(--y);background:#f5c54255}
+#bar{position:fixed;left:0;right:0;bottom:0;padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px));background:var(--g);display:flex;gap:8px;z-index:6}
+#bar[hidden]{display:none}
+#bar button{flex:1;border:0;border-radius:14px;padding:12px 6px;font-family:inherit;font-size:17px;font-weight:700;background:var(--y);color:#1d2b26}
+#bar #pp{flex:3}
+</style></head><body>
+<div id="splash"><div class="bis">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+<svg width="130" height="130" viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="#fff2" stroke="#f5c542" stroke-width="4"/><path d="M62 24a28 28 0 1 0 0 52a22 22 0 1 1 0-52z" fill="#f5c542"/><path d="M26 62l24-8 24 8v6l-24-8-24 8z" fill="#fff"/><path d="M50 54v-10" stroke="#fff" stroke-width="3"/><circle cx="50" cy="40" r="5" fill="#fff"/></svg>
+<h1>নূরানী পাঠশালা</h1><div>আরবি • বাংলা • ইংরেজি • গণিত</div></div>
+<header><button id="back" onclick="back()" hidden>←</button><span id="ttl">নূরানী পাঠশালা</span></header>
+<main id="m"></main>
+<script>
+const $=id=>document.getElementById(id);let st=[];
+setTimeout(()=>{$("splash").style.opacity=0;setTimeout(()=>$("splash").remove(),600)},1800);
+function sp(t,l,i){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang=l;u.rate=.75;u.pitch=(i||0)%2?1.8:1.35;
+const v=speechSynthesis.getVoices().filter(x=>x.lang.replace("_","-").startsWith(l.slice(0,2)));if(v.length)u.voice=v[(i||0)%v.length];speechSynthesis.speak(u)}catch(e){}}
+const cats=[["নূরানী প্রাইমারি","📚","#e53935","#ffe7ea","prim"],["আরবি শিক্ষা","🕌","#43a047","#e5f4e8","arb"],["কুরআন","📖","#0d5c46","#dff3ea","qur"],["সাধারণ জ্ঞান","💡","#00897b","#dff0f0","gk"],["গজল","🎵","#8e24aa","#f1e3f5","goj"],["নামাজ শিক্ষা","🕋","#fb8c00","#fff0dc","nmz"]];
+const cls=["প্লে","নার্সারি","প্রথম শ্রেণি","দ্বিতীয় শ্রেণি","তৃতীয় শ্রেণি"];
+const sub=[["আরবি","🕌","আলিফ বা তা ছা জীম হা খা"],["বাংলা","📖","অ আ ই ঈ উ ঊ ঋ এ ঐ ও ঔ"],["ইংরেজি","🔤","A B C D E F G H I J"],["গণিত","🔢","এক দুই তিন চার পাঁচ ছয় সাত আট নয় দশ"],["দ্বীনিয়াত","🤲","বিসমিল্লাহির রাহমানির রাহীম"]];
+const AL=[["ا","আলিফ"],["ب","বা"],["ت","তা"],["ث","ছা"],["ج","জীম"],["ح","হা"],["خ","খা"],["د","দাল"],["ذ","যাল"],["ر","রা"],["ز","যা"],["س","সীন"],["ش","শীন"],["ص","সোয়াদ"],["ض","দোয়াদ"],["ط","তোয়া"],["ظ","যোয়া"],["ع","আইন"],["غ","গাইন"],["ف","ফা"],["ق","কাফ"],["ك","কাফ"],["ل","লাম"],["م","মীম"],["ن","নূন"],["و","ওয়াও"],["ه","হা"],["ي","ইয়া"]];
+const SU=[["সূরা আল-ফাতিহা",[["بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ","শুরু করছি আল্লাহর নামে, যিনি পরম দয়ালু, অতি দয়াময়।"],["الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ","সকল প্রশংসা আল্লাহর, যিনি সমগ্র জগতের পালনকর্তা।"],["الرَّحْمَٰنِ الرَّحِيمِ","যিনি পরম দয়ালু, অতি দয়াময়।"],["مَالِكِ يَوْمِ الدِّينِ","যিনি বিচার দিবসের মালিক।"],["إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ","আমরা শুধু আপনারই ইবাদত করি এবং শুধু আপনারই সাহায্য চাই।"],["اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ","আমাদের সরল পথ দেখান।"],["صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ","তাদের পথ, যাদের আপনি অনুগ্রহ করেছেন; তাদের নয়, যাদের ওপর গজব পড়েছে এবং যারা পথভ্রষ্ট।"]]],
+["সূরা আল-ইখলাস",[["قُلْ هُوَ اللَّهُ أَحَدٌ","বলুন, তিনি আল্লাহ, এক।"],["اللَّهُ الصَّمَدُ","আল্লাহ অমুখাপেক্ষী।"],["لَمْ يَلِدْ وَلَمْ يُولَدْ","তিনি কাউকে জন্ম দেননি এবং কারও থেকে জন্ম নেননি।"],["وَلَمْ يَكُنْ لَهُ كُفُوًا أَحَدٌ","এবং তাঁর সমকক্ষ কেউ নেই।"]]]];
+const GK=[["ফলের নাম","আম, জাম, কাঁঠাল, লিচু, কলা, আপেল, পেয়ারা"],["রঙের নাম","লাল, নীল, সবুজ, হলুদ, সাদা, কালো"],["সপ্তাহের বার","শনিবার, রবিবার, সোমবার, মঙ্গলবার, বুধবার, বৃহস্পতিবার, শুক্রবার"],["পশুপাখি","গরু, ছাগল, বাঘ, হাতি, কাক, কোকিল, ময়না"],["আরবি মাস","মুহাররম, সফর, রবিউল আউয়াল, রবিউস সানি, জমাদিউল আউয়াল, জমাদিউস সানি, রজব, শা'বান, রমযান, শাওয়াল, জিলকদ, জিলহজ"],["দোয়া","বিসমিল্লাহ বলে খাওয়া শুরু করি। আলহামদুলিল্লাহ বলে শেষ করি।"]];
+const GJ=[["আমি ছোট্ট সোনামণি","আমি ছোট্ট সোনামণি, আল্লাহর নাম জপি। সকাল সন্ধ্যা সবার আগে, আল্লাহকে স্মরি।"],["বিসমিল্লাহ বলি","বিসমিল্লাহ বলে কাজ শুরু করি, আলহামদুলিল্লাহ বলে শেষ। মা-বাবার কথা মেনে চলি, হই ভালো এক দেশ।"],["সালাম দিই","আসসালামু আলাইকুম, সবাইকে বলি। হাসিমুখে সালাম দিয়ে, সবার সাথে চলি।"]];
+const rd=(l,i,t,s)=>`<div class="row"><b>${t}${s?`<br><small>${s}</small>`:""}</b><button class="sp" onclick="sp(${JSON.stringify(l)},'${i}',${arguments[4]||0})">🔊</button></div>`;
+function go(v){st.push(v);draw()}function back(){st.pop();draw()}
+function draw(){const v=st[st.length-1],m=$("m");$("back").hidden=!v;stopQ();$("ttl").textContent=v?v[1]:"নূরানী পাঠশালা";window.scrollTo(0,0);
+if(!v){m.innerHTML='<div class="grid">'+cats.map(c=>`<button class="c" style="background:${c[3]}" onclick="go(['${c[4]}','${c[0]}'])"><div class="i">${c[1]}</div><div class="t" style="background:${c[2]}">${c[0]}</div></button>`).join("")+"</div>";return}
+const k=v[0];let h="";
+if(k=="prim")h=cls.map((c,i)=>`<button class="row" onclick="go(['cl','${c}',${i}])"><b>🎒 ${c}</b>›</button>`).join("");
+else if(k=="cl")h=sub.map((s,i)=>`<button class="row" onclick="go(['bk','${v[1]} – ${s[0]}',${i}])"><b>${s[1]} ${s[0]} বই</b>›</button>`).join("");
+else if(k=="bk"){const s=sub[v[2]];h=rd(s[2],s[0]=="ইংরেজি"?"en-US":s[0]=="আরবি"?"ar-SA":"bn-BD",s[2],"নমুনা পাঠ – শুনতে 🔊 চাপো",v[2])+'<div class="note">এখানে এই শ্রেণির বইয়ের পাঠ ও অডিও যুক্ত হবে।</div>'}
+else if(k=="arb"){h='<div class="l">'+AL.map((a,i)=>`<button onclick="sp('${a[1]}','bn-BD',${i})">${a[0]}<small>${a[1]}</small></button>`).join("")+'</div><div class="note">অক্ষরে চাপ দিলে নাম শোনা যাবে। সহি উচ্চারণের রেকর্ড করা অডিও পরে যুক্ত হবে।</div>'}
+else if(k=="qur"){h=SU.map((s,i)=>`<button class="row" onclick="go(['sr','${s[0]}',${i}])"><b>${s[0]}</b>›</button>`).join("")+'<h3>৩০ পারা</h3><div class="p">'+Array.from({length:30},(_,i)=>`<span>${i+1}</span>`).join("")+'</div><div class="note">পুরো ৩০ পারা, বাংলা অর্থ ও মিশারী আল-আফাসির তিলাওয়াত পরের ধাপে যুক্ত হবে।</div>'}
+else if(k=="sr")h=SU[v[2]][1].map((a,i)=>`<div class="row" style="display:block"><div class="ar">${a[0]}</div><div style="display:flex;gap:10px;align-items:center"><span style="flex:1">${a[1]}</span><button class="sp" onclick="sp('${a[0]}','ar-SA',${i})">🔊</button></div></div>`).join("");
+else if(k=="gk")h=GK.map((g,i)=>rd(g[1],"bn-BD","<b>"+g[0]+"</b>",g[1],i)).join("");
+else if(k=="goj")h=GJ.map((g,i)=>rd(g[1],"bn-BD","🎵 "+g[0],g[1],i)).join("");
+else if(k=="nmz")h='<div class="note" style="margin:0 0 14px">📜 মূল নির্দেশ: "তোমরা আমাকে যেভাবে নামাজ পড়তে দেখো, সেভাবে পড়ো" — বুখারী ৬৩১। ধাপগুলো ক্রমানুসারে সাজানো। হাদীস নম্বর যাচাই করে নিও এবং মাসআলায় নিজের নির্ভরযোগ্য আলেমকে জিজ্ঞেস করো।</div>'+NM.map(card).join("");
+m.innerHTML=h;enhance()}
+const PS={stand:[[50,16],[[50,22,50,58],[50,30,40,52],[50,30,60,52],[50,58,42,92],[50,58,58,92]]],raise:[[50,16],[[50,22,50,58],[50,30,34,20],[50,30,66,20],[50,58,42,92],[50,58,58,92]]],fold:[[50,16],[[50,22,50,58],[50,30,40,44],[40,44,58,44],[50,30,58,44],[50,58,42,92],[50,58,58,92]]],ruku:[[84,38],[[40,60,40,92],[40,60,76,42],[66,46,42,76]]],sijda:[[80,82],[[22,90,38,90],[38,90,38,56],[38,56,72,76],[62,70,72,90]]],sit:[[40,16],[[40,22,40,66],[40,66,62,84],[62,84,22,88],[40,32,60,80]]],salam:[[48,16],[[40,22,40,66],[40,66,62,84],[62,84,22,88],[40,32,60,80]]],dua:[[40,16],[[40,22,40,66],[40,66,62,84],[62,84,22,88],[40,32,56,44],[40,32,52,50]]]};
+function pose(k){const[h,l]=PS[k];return `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"><circle cx="${h[0]}" cy="${h[1]}" r="7" fill="currentColor"/>${l.map(a=>`<line x1="${a[0]}" y1="${a[1]}" x2="${a[2]}" y2="${a[3]}"/>`).join("")}<line x1="5" y1="96" x2="95" y2="96" stroke-width="2" opacity=".4"/></svg>`}
+const FT=SU[0][1].map(x=>x[0]).join(" "),IK=SU[1][1].map(x=>x[0]).join(" ");
+const NM=[
+["নিয়ত ও ক্বিবলামুখী দাঁড়ানো","stand","","ক্বিবলার দিকে মুখ করে সোজা হয়ে দাঁড়াও, দৃষ্টি সিজদার জায়গায় রাখো। নিয়ত অন্তরের সংকল্প।","আমল নিয়তের ওপর নির্ভরশীল — বুখারী ১, মুসলিম ১৯০৭"],
+["তাকবীরে তাহরীমা ও হাত তোলা","raise","اللَّهُ أَكْبَرُ","আল্লাহু আকবার বলে দুই হাত কাঁধ বরাবর তোলো (কান বরাবরও বর্ণিত আছে)।","বুখারী ৭৩৫; কান বরাবর: মুসলিম ৩৯১"],
+["হাত বাঁধা","fold","","ডান হাত বাম হাতের ওপর রাখো।","বুখারী ৭৪০ (সাহল ইবনে সা'দ রা.)"],
+["শুরুর দোয়া (সানা)","fold","سُبْحَانَكَ اللَّهُمَّ وَبِحَمْدِكَ وَتَبَارَكَ اسْمُكَ وَتَعَالَى جَدُّكَ وَلَا إِلَٰهَ غَيْرُكَ","হে আল্লাহ, আপনি পবিত্র, আপনার প্রশংসা করছি। আপনার নাম বরকতময়, আপনার মর্যাদা সুউচ্চ, আপনি ছাড়া কোনো ইলাহ নেই।","উমার রা. এটি শিখিয়েছেন — মুসলিম ৩৯৯; আবূ দাউদ ৭৭৫, তিরমিযী ২৪৩ (সনদ নিয়ে মতভেদ আছে)। বিকল্প সহিহ দোয়া: 'আল্লাহুম্মা বা'ইদ বাইনী ওয়া বাইনা খাতায়ায়া...' — বুখারী ৭৪৪, মুসলিম ৫৯৮"],
+["সূরা ফাতিহা","fold",FT,"অর্থ: কুরআন অংশে সূরা ফাতিহা খুলে দেখো। শেষে আমীন বলো।","ফাতিহা ছাড়া নামাজ হয় না — বুখারী ৭৫৬, মুসলিম ৩৯৪; আমীন: বুখারী ৭৮০"],
+["ফাতিহার পর অন্য সূরা","fold",IK,"উদাহরণ: সূরা ইখলাস (এক্সাথে যেকোনো ছোট সূরা পড়া যায়)।","প্রথম দুই রাকাতে ফাতিহার সাথে সূরা — বুখারী ৭৫৯ (আবূ ক্বাতাদা রা.)"],
+["রুকূ","ruku","سُبْحَانَ رَبِّيَ الْعَظِيمِ","আল্লাহু আকবার বলে ঝুঁকো, পিঠ সোজা, দুই হাতে হাঁটু ধরো, মাথা পিঠ বরাবর। পড়ো: পবিত্র আমার মহান প্রতিপালক (৩ বার প্রচলিত)। রুকূতে যাওয়ার সময়ও হাত তোলা বর্ণিত — বুখারী ৭৩৫।","মুসলিম ৭৭২ (হুযাইফা রা.); হাঁটুতে হাত: বুখারী ৮২৮"],
+["রুকূ থেকে সোজা হয়ে ওঠা","raise","سَمِعَ اللَّهُ لِمَنْ حَمِدَهُ، رَبَّنَا لَكَ الْحَمْدُ","আল্লাহ তার কথা শোনেন যে তাঁর প্রশংসা করে। হে আমাদের রব, সব প্রশংসা আপনার। সম্পূর্ণ সোজা হয়ে দাঁড়াও।","বুখারী ৭৯৫–৭৯৬"],
+["সিজদা","sijda","سُبْحَانَ رَبِّيَ الْأَعْلَى","কপাল, নাক, দুই হাতের তালু, দুই হাঁটু ও দুই পায়ের আঙুল — এই সাত অঙ্গ মাটিতে রাখো। পড়ো: পবিত্র আমার সর্বোচ্চ প্রতিপালক। সিজদায় বেশি করে দোয়া করো।","সাত অঙ্গ: বুখারী ৮১২, মুসলিম ৪৯০; তাসবীহ: মুসলিম ৭৭২; দোয়ার ফযীলত: মুসলিম ৪৮২"],
+["দুই সিজদার মাঝে বসা","sit","رَبِّ اغْفِرْ لِي","হে আমার রব, আমাকে ক্ষমা করুন। বাম পা বিছিয়ে বসো, ডান পা খাড়া রাখো।","আবূ দাউদ ৮৭৪, ইবনু মাজাহ ৮৯৭ (আলবানী সহিহ বলেছেন)"],
+["তাশাহহুদ (আত্তাহিয়্যাতু)","sit","التَّحِيَّاتُ لِلَّهِ وَالصَّلَوَاتُ وَالطَّيِّبَاتُ، السَّلَامُ عَلَيْكَ أَيُّهَا النَّبِيُّ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ، السَّلَامُ عَلَيْنَا وَعَلَى عِبَادِ اللَّهِ الصَّالِحِينَ، أَشْهَدُ أَنْ لَا إِلَٰهَ إِلَّا اللَّهُ وَأَشْهَدُ أَنَّ مُحَمَّدًا عَبْدُهُ وَرَسُولُهُ","সকল সম্মান, নামাজ ও পবিত্র বিষয় আল্লাহর জন্য। হে নবী, আপনার ওপর শান্তি, আল্লাহর রহমত ও বরকত। আমাদের ও আল্লাহর সৎ বান্দাদের ওপর শান্তি। আমি সাক্ষ্য দিচ্ছি আল্লাহ ছাড়া কোনো ইলাহ নেই এবং মুহাম্মাদ ﷺ তাঁর বান্দা ও রাসূল।","বুখারী ৮৩১, মুসলিম ৪০২ (ইবনে মাসঊদ রা.)"],
+["দুরূদে ইবরাহীম","sit","اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ كَمَا صَلَّيْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيدٌ مَجِيدٌ، اللَّهُمَّ بَارِكْ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ كَمَا بَارَكْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ إِنَّكَ حَمِيدٌ مَجِيدٌ","হে আল্লাহ, মুহাম্মাদ ﷺ ও তাঁর পরিবারের ওপর রহমত বর্ষণ করুন, যেমন ইবরাহীম আ. ও তাঁর পরিবারের ওপর করেছেন। নিশ্চয়ই আপনি প্রশংসিত, মহিমান্বিত। একইভাবে বরকত দিন।","বুখারী ৩৩৭০ (কা'ব ইবনে উজরা রা.)"],
+["সালামের আগে দোয়া","dua","رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً وَقِنَا عَذَابَ النَّارِ","হে আমাদের রব, দুনিয়ায় কল্যাণ দিন, আখিরাতেও কল্যাণ দিন এবং জাহান্নামের আযাব থেকে বাঁচান।","বুখারী ৬৩৮৯ (নবী ﷺ-এর সবচেয়ে বেশি পঠিত দোয়া)"],
+["সালাম ফেরানো","salam","السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ","প্রথমে ডানে, তারপর বামে মুখ ফেরিয়ে সালাম দাও।","মুসলিম ৫৮২ (সা'দ ইবনে আবী ওয়াক্কাস রা.)"],
+["নামাজের পর জিকির: ইসতিগফার","dua","أَسْتَغْفِرُ اللَّهَ (৩ বার) — اللَّهُمَّ أَنْتَ السَّلَامُ وَمِنْكَ السَّلَامُ تَبَارَكْتَ يَا ذَا الْجَلَالِ وَالْإِكْرَامِ","আমি আল্লাহর কাছে ক্ষমা চাই। হে আল্লাহ, আপনিই শান্তি, আপনার কাছ থেকেই শান্তি। হে মহিমা ও সম্মানের অধিকারী, আপনি বরকতময়।","মুসলিম ৫৯১ (সাওবান রা.)"],
+["তাসবীহ ও তাহলীল","dua","سُبْحَانَ اللَّهِ (৩৩) ، الْحَمْدُ لِلَّهِ (৩৩) ، اللَّهُ أَكْبَرُ (৩৩) ، لَا إِلَٰهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَىٰ كُلِّ شَيْءٍ قَدِيرٌ","সুবহানাল্লাহ ৩৩, আলহামদুলিল্লাহ ৩৩, আল্লাহু আকবার ৩৩ বার, তারপর তাহলীল পড়ে একশো পূর্ণ করো। গুনাহ মাফের সুসংবাদ আছে।","মুসলিম ৫৯৫ (আবূ হুরায়রা রা.)"],
+["আয়াতুল কুরসী","dua","اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَنْ ذَا الَّذِي يَشْفَعُ عِنْدَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ","আল্লাহ ছাড়া কোনো ইলাহ নেই; তিনি চিরঞ্জীব, সবকিছুর ধারক। তন্দ্রা বা নিদ্রা তাঁকে স্পর্শ করে না। আসমান-জমিনের সবকিছু তাঁর। তাঁর অনুমতি ছাড়া কে সুপারিশ করবে? তিনি সবই জানেন। তাঁর কুরসী আসমান-জমিন জুড়ে; এগুলোর রক্ষণাবেক্ষণ তাঁকে ক্লান্ত করে না। তিনি সর্বোচ্চ, মহান।","প্রতি ফরজ নামাজের পর — নাসাঈ, সুনানুল কুবরা (আলবানী সহিহ বলেছেন)"],
+["শেষে দোয়া","dua","اللَّهُمَّ أَعِنِّي عَلَىٰ ذِكْرِكَ وَشُكْرِكَ وَحُسْنِ عِبَادَتِكَ","হে আল্লাহ, আপনার জিকির, শুকর ও সুন্দরভাবে ইবাদত করতে আমাকে সাহায্য করুন। এরপর নিজের ভাষায় দোয়া করো; শুরুতে আল্লাহর প্রশংসা ও দুরূদ পড়া উত্তম। (ফরজ নামাজের পর সম্মিলিত মুনাজাত নিয়ে আলেমদের মতভেদ আছে — নিজের আলেমের কাছে জেনে নাও।)","আবূ দাউদ ১৫২২ (আলবানী সহিহ বলেছেন); দোয়ার আদব: আবূ দাউদ ১৪৮১, তিরমিযী ৩৪৭৭"]
+];
+const card=(n,i)=>`<div class="row" style="display:block"><div style="display:flex;gap:12px;align-items:center"><div style="width:84px;flex:none;color:var(--g2)">${pose(n[1])}</div><b>${i+1}. ${n[0]}</b><button class="sp" onclick="sp(NM[${i}][2]||NM[${i}][3],NM[${i}][2]?'ar-SA':'bn-BD',${i})">🔊</button></div>${n[2]?`<div class="ar">${n[2]}</div>`:""}<div style="font-size:16px">${n[3]}</div><small style="display:block;margin-top:6px;opacity:.8">📜 ${n[4]}</small></div>`;
+SU.push(["সূরা আল-ইখলাস শেষে",[]]);SU.pop();
+SU.push(["সূরা আল-ফালাক্ব",[["قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ","বলুন, আমি আশ্রয় চাই ভোরের রবের কাছে।"],["مِنْ شَرِّ مَا خَلَقَ","তিনি যা সৃষ্টি করেছেন তার অনিষ্ট থেকে।"],["وَمِنْ شَرِّ غَاسِقٍ إِذَا وَقَبَ","অন্ধকার রাতের অনিষ্ট থেকে, যখন তা ছেয়ে যায়।"],["وَمِنْ شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ","গিঁঠে ফুঁকদানকারিণীদের অনিষ্ট থেকে।"],["وَمِنْ شَرِّ حَاسِدٍ إِذَا حَسَدَ","এবং হিংসুকের অনিষ্ট থেকে, যখন সে হিংসা করে।"]]]);
+SU.push(["সূরা আন-নাস",[["قُلْ أَعُوذُ بِرَبِّ النَّاسِ","বলুন, আমি আশ্রয় চাই মানুষের রবের কাছে।"],["مَلِكِ النَّاسِ","মানুষের অধিপতির কাছে।"],["إِلَٰهِ النَّاسِ","মানুষের ইলাহের কাছে।"],["مِنْ شَرِّ الْوَسْوَاسِ الْخَنَّاسِ","গোপন কুমন্ত্রণাদাতার অনিষ্ট থেকে, যে পিছিয়ে যায়।"],["الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ","যে মানুষের অন্তরে কুমন্ত্রণা দেয়।"],["مِنَ الْجِنَّةِ وَالنَّاسِ","জিনের মধ্য থেকে এবং মানুষের মধ্য থেকে।"]]]);
+SU.push(["সূরা আল-কাওসার",[["إِنَّا أَعْطَيْنَاكَ الْكَوْثَرَ","নিশ্চয়ই আমি আপনাকে কাউসার দান করেছি।"],["فَصَلِّ لِرَبِّكَ وَانْحَرْ","অতএব আপনার রবের উদ্দেশ্যে নামাজ পড়ুন ও কুরবানী করুন।"],["إِنَّ شَانِئَكَ هُوَ الْأَبْتَرُ","নিশ্চয়ই আপনার শত্রুই নির্বংশ।"]]]);
+SU.push(["সূরা আল-আসর",[["وَالْعَصْرِ","সময়ের কসম।"],["إِنَّ الْإِنْسَانَ لَفِي خُسْرٍ","নিশ্চয়ই মানুষ ক্ষতিগ্রস্ত।"],["إِلَّا الَّذِينَ آمَنُوا وَعَمِلُوا الصَّالِحَاتِ وَتَوَاصَوْا بِالْحَقِّ وَتَوَاصَوْا بِالصَّبْرِ","তারা ছাড়া, যারা ঈমান এনেছে, সৎকাজ করেছে, একে অপরকে সত্যের ও ধৈর্যের উপদেশ দিয়েছে।"]]]);
+let U=[],ci=-1,pl=false,rt=.7,lp=false,T=0;
+const bar=document.createElement("div");bar.id="bar";bar.hidden=true;
+bar.innerHTML='<button id="pp" onclick="tog()">▶ সব শুনুন</button><button id="sd" onclick="spd()">ধীর</button><button id="lp" onclick="rep()" style="opacity:.5">🔁</button>';
+document.body.appendChild(bar);
+function say(t,l,i,cb){try{const u=new SpeechSynthesisUtterance(t);u.lang=l;u.rate=rt;u.pitch=i%2?1.8:1.35;const v=speechSynthesis.getVoices().filter(x=>x.lang.replace("_","-").startsWith(l.slice(0,2)));if(v.length)u.voice=v[i%v.length];u.onend=cb;u.onerror=cb;setTimeout(()=>speechSynthesis.speak(u),60)}catch(e){cb()}}
+function clr(){document.querySelectorAll(".on").forEach(e=>e.classList.remove("on"))}
+function stopQ(){T++;pl=false;try{speechSynthesis.cancel()}catch(e){}clr();bar.hidden=true;$("pp").textContent="▶ সব শুনুন"}
+function play(k,all){if(k>=U.length){if(lp&&all)k=0;else{pl=false;$("pp").textContent="▶ সব শুনুন";return}}
+ci=k;const u=U[k],tok=++T;clr();u.el.classList.add("on");u.el.scrollIntoView({block:"center",behavior:"smooth"});try{speechSynthesis.cancel()}catch(e){}
+pl=!!all;$("pp").textContent=all?"⏸ থামুন":"▶ সব শুনুন";let j=0;
+const nx=()=>{if(tok!=T)return;if(j<u.p.length){const p=u.p[j++];say(p[0],p[1],k,nx)}else if(all)play(k+1,true)};nx()}
+function tog(){if(pl){T++;pl=false;speechSynthesis.cancel();$("pp").textContent="▶ সব শুনুন"}else play(ci>=0?ci:0,true)}
+function spd(){rt=rt==.7?.95:.7;$("sd").textContent=rt==.7?"ধীর":"স্বাভাবিক"}
+function rep(){lp=!lp;$("lp").style.opacity=lp?1:.5}
+function enhance(){U=[];ci=-1;document.querySelectorAll("#m .l button,#m .row").forEach(el=>{const isL=el.matches(".l button"),b=isL?el:el.querySelector(".sp");if(!b)return;const src=b.getAttribute("onclick")||"";let c=null;const o=window.sp;window.sp=(t,l)=>{c=[t,l]};try{new Function(src)()}catch(e){}window.sp=o;if(!c)return;
+const p=[[c[0],c[1]]];if(el.querySelector(".ar")){const mn=el.querySelector('span[style*="flex"],div[style*="16px"]');if(mn&&c[1]=="ar-SA")p.push([mn.textContent,"bn-BD"])}
+const k=U.length;U.push({el,p});if(isL)b.onclick=()=>play(k,false);else{b.onclick=e=>{e.stopPropagation();play(k,false)};el.onclick=()=>play(k,true)}});bar.hidden=!U.length}
+draw();
+</script>
+<!-- Extended learning modules + Supabase authentication -->
+<style>
+.authbar{display:flex;gap:8px;align-items:center;margin-left:auto}
+.authbar button,.action{border:0;border-radius:12px;padding:9px 12px;background:var(--y);color:#1d2b26;font:600 14px inherit}
+.panel{background:var(--card);padding:16px;border-radius:18px;margin:12px 0;box-shadow:0 2px 8px #0002}
+.panel h3{margin-top:0}.field{width:100%;padding:12px;border:1px solid #aaa;border-radius:10px;margin:6px 0 12px;font:inherit;background:var(--bg);color:var(--ink)}
+.actions{display:flex;gap:8px;flex-wrap:wrap}.muted{opacity:.75;font-size:13px}.ayah{padding:14px 0;border-bottom:1px solid #8885}.ayah .ar{font-size:29px}.ayah audio{width:100%;margin-top:8px}
+.authveil{position:fixed;inset:0;background:#0009;z-index:20;display:none;align-items:center;justify-content:center;padding:16px}.authbox{background:var(--card);color:var(--ink);border-radius:18px;padding:20px;width:min(440px,100%);max-height:90vh;overflow:auto}
+.authbox input{width:100%;padding:12px;border:1px solid #aaa;border-radius:10px;margin:7px 0 12px;background:var(--bg);color:var(--ink)}
+.authbox button{padding:10px 14px;border:0;border-radius:10px;background:var(--g);color:white;margin:4px}
+</style>
+<div class="authveil" id="authveil"><div class="authbox">
+ <div style="display:flex;justify-content:space-between;align-items:center"><h3>অ্যাকাউন্ট</h3><button onclick="closeAuth()">✕</button></div>
+ <div id="authstatus" class="muted">রেজিস্টার বা লগইন করুন</div>
+ <label>ইমেইল</label><input id="authemail" type="email" autocomplete="email" placeholder="আপনার ইমেইল">
+ <label>পাসওয়ার্ড</label><div style="display:flex;gap:6px"><input id="authpass" type="password" autocomplete="current-password" placeholder="কমপক্ষে ৬ অক্ষর"><button onclick="togglePass()" type="button">👁</button></div>
+ <div class="actions"><button onclick="signUp()">রেজিস্টার</button><button onclick="signIn()">লগইন</button><button onclick="resetPass()">পাসওয়ার্ড ভুলে গেছি</button><button onclick="signOut()">লগআউট</button></div>
+ <p class="muted">নিরাপদ লগইন চালু করতে Supabase Project URL ও anon/publishable key কোডের SUPABASE_CONFIG-এ বসাতে হবে। ইমেইল কনফার্মেশন চালু থাকলে ইনবক্স যাচাই করুন।</p>
+</div></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+/* Auth configuration: replace these two values with the user's own Supabase project credentials. */
+const SUPABASE_CONFIG={url:"https://rwthmscrufhditioatpf.supabase.co",key:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ3dGhtc2NydWZoZGl0aW9hdHBmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQwNzU2MDUsImV4cCI6MjEwOTY1MTYwNX0.hSexmFT44SmXXL6yL3D7ViBhhaa9QjE4Gr9E5neP9hw"};
+let sb=null;
+try{if(window.supabase&&SUPABASE_CONFIG.url.startsWith("https://")&&!SUPABASE_CONFIG.key.startsWith("YOUR_"))sb=window.supabase.createClient(SUPABASE_CONFIG.url,SUPABASE_CONFIG.key)}catch(e){}
+function openAuth(){document.getElementById("authveil").style.display="flex";authRefresh()}
+function closeAuth(){document.getElementById("authveil").style.display="none"}
+function togglePass(){const x=document.getElementById("authpass");x.type=x.type==="password"?"text":"password"}
+function authMsg(t){document.getElementById("authstatus").textContent=t}
+function authReady(){if(!sb){authMsg("Supabase এখনো সংযুক্ত নয়। SUPABASE_CONFIG-এ Project URL এবং anon/publishable key বসান।");return false}return true}
+async function signUp(){if(!authReady())return;const email=authemail.value.trim(),password=authpass.value;if(!email||password.length<6)return authMsg("সঠিক ইমেইল ও কমপক্ষে ৬ অক্ষরের পাসওয়ার্ড দিন।");const{error}=await sb.auth.signUp({email,password});authMsg(error?error.message:"রেজিস্ট্রেশন সফল। ইমেইলে confirmation link এলে সেটি খুলুন।")}
+async function signIn(){if(!authReady())return;const{data,error}=await sb.auth.signInWithPassword({email:authemail.value.trim(),password:authpass.value});authMsg(error?error.message:"লগইন সফল। স্বাগতম!");if(!error)setTimeout(closeAuth,900)}
+async function resetPass(){if(!authReady())return;const email=authemail.value.trim();if(!email)return authMsg("আগে ইমেইল লিখুন।");const{error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:location.origin+location.pathname});authMsg(error?error.message:"পাসওয়ার্ড রিসেট লিংক ইমেইলে পাঠানো হয়েছে।")}
+async function signOut(){if(!authReady())return;const{error}=await sb.auth.signOut();authMsg(error?"লগআউট হয়নি: "+error.message:"লগআউট হয়েছে।")}
+async function authRefresh(){if(!sb){authMsg("Supabase সংযোগ সেটআপ বাকি।");return}const{data}=await sb.auth.getUser();authMsg(data.user?"লগইন করা আছে: "+data.user.email:"রেজিস্টার বা লগইন করুন")}
+if(sb)sb.auth.onAuthStateChange(()=>authRefresh());
+const oldDraw=draw;
+draw=function(){
+ const v=st[st.length-1],m=$("m"),k=v&&v[0];
+ if(k==="prim"){m.innerHTML='<div class="panel"><h3>নূরানী প্রাইমারি বই</h3><p>প্লে, নার্সারি ও প্রথম–তৃতীয় শ্রেণির বইগুলো শ্রেণি ও বিষয়ভিত্তিক সাজানো হয়েছে। বোর্ডের কপিরাইটযুক্ত বই অনুমতি ছাড়া অ্যাপে কপি/ডাউনলোড করে রাখা হচ্ছে না; অফিসিয়াল প্রকাশনা থেকে খুলুন।</p><div class="actions"><a class="action" href="https://www.nooraniboard.org/" target="_blank" rel="noopener">নূরানী বোর্ডের অফিসিয়াল সাইট</a><a class="action" href="https://nctb.portal.gov.bd/" target="_blank" rel="noopener">NCTB অফিসিয়াল সাইট</a></div></div>'+cls.map((c,i)=>`<button class="row" onclick="go(['bookclass','${c}',${i}])"><b>📚 ${c}</b>›</button>`).join("");$("back").hidden=false;$("ttl").textContent="নূরানী প্রাইমারি";return}
+ if(k==="bookclass"){const subjects=[["আরবি","🕌"],["বাংলা","📖"],["ইংরেজি","🔤"],["গণিত","🔢"],["দ্বীনিয়াত","🤲"]];m.innerHTML='<div class="panel"><h3>'+v[1]+' — বই ও পাঠ</h3><p>বোর্ডের নির্দিষ্ট বইয়ের PDF লিংক প্রকাশিত থাকলে অফিসিয়াল সাইট থেকে সংগ্রহ করুন।</p></div>'+subjects.map(x=>`<div class="row"><b>${x[1]} ${x[0]}</b><a class="action" href="https://www.nooraniboard.org/" target="_blank" rel="noopener">বই/প্রকাশনা দেখুন</a></div>`).join("");$("back").hidden=false;$("ttl").textContent=v[1];return}
+ if(k==="qur"){m.innerHTML='<div class="panel"><h3>পবিত্র কুরআন — ৩০ পারা</h3><p>প্রতিটি পারায় আরবি আয়াত, বাংলা অনুবাদ ও মিশারী রাশিদ আল-আফাসির তিলাওয়াত অনলাইনে লোড হবে। ইন্টারনেট সংযোগ লাগবে। অনুবাদটি অর্থ বোঝার সহায়ক; তাফসিরের বিকল্প নয়।</p></div><div id="juzlist" class="grid">'+Array.from({length:30},(_,i)=>`<button class="row" onclick="loadJuz(${i+1})"><b>📖 পারা ${i+1}</b>›</button>`).join("")+'</div><div id="quranresult"></div>';$("back").hidden=false;$("ttl").textContent="কুরআন শরীফ";return}
+ if(k==="arb"){oldDraw();m.insertAdjacentHTML("afterbegin",'<div class="panel"><b>উচ্চারণ সতর্কতা:</b> বাংলা হরফে আরবি মাখরাজ পুরোপুরি বোঝানো যায় না। ব্রাউজারের TTS-কে সহিহ কিরাআত/তাজবিদের বিকল্প ধরা যাবে না। নির্ভরযোগ্য শিক্ষকের রেকর্ড করা অডিও যাচাই করে যুক্ত করতে হবে। <a href="https://www.nooraniboard.org/" target="_blank" rel="noopener">নূরানী বোর্ড</a></div>');return}
+ oldDraw();
+};
+async function loadJuz(n){
+ const out=document.getElementById("quranresult");out.innerHTML='<div class="panel">পারা '+n+' লোড হচ্ছে…</div>';
+ try{
+  const url='https://api.alquran.cloud/v1/juz/'+n+'/editions/quran-uthmani,bn.bengali,ar.alafasy';
+  const r=await fetch(url);if(!r.ok)throw Error("API response "+r.status);const j=await r.json();if(j.code!==200)throw Error(j.status||"API error");
+  const packs=j.data,arab=packs.find(x=>x.edition.identifier==="quran-uthmani")||packs[0],bn=packs.find(x=>x.edition.language==="bn"||x.edition.identifier==="bn.bengali"),aud=packs.find(x=>x.edition.identifier==="ar.alafasy");
+  const trans=bn?bn.ayahs:[],audio=aud?aud.ayahs:[];
+  out.innerHTML='<div class="panel"><h3>পারা '+n+' — '+arab.ayahs.length+' আয়াত</h3><button class="action" onclick="window.scrollTo({top:0,behavior:\'smooth\'})">উপরে যান</button></div>'+arab.ayahs.map((a,i)=>{const t=trans[i]?.text||"বাংলা অনুবাদ পাওয়া যায়নি";const au=audio[i]?.audio||"";return `<div class="panel ayah"><div class="muted">${a.surah?.englishName||""} — আয়াত ${a.numberInSurah}</div><div class="ar" dir="rtl">${a.text}</div><p>${t}</p>${au?`<audio controls preload="none" src="${au}"></audio>`:'<span class="muted">এই আয়াতের অডিও লিংক পাওয়া যায়নি।</span>'}</div>`}).join("");
+ }catch(e){out.innerHTML='<div class="panel">কুরআনের তথ্য লোড করা যায়নি। ইন্টারনেট/API সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।<br><small>'+String(e.message||e)+'</small><p><a href="https://alquran.cloud/api" target="_blank" rel="noopener">API তথ্য</a></p></div>'}
+}
+const authBtn=document.createElement("button");authBtn.textContent="লগইন";authBtn.onclick=openAuth;authBtn.style.cssText="margin-left:auto;border:0;border-radius:12px;padding:8px 12px;background:var(--y);font-weight:bold";
+document.querySelector("header").appendChild(authBtn);
+const gojExtra=Array.from({length:20},(_,i)=>({name:"ইসলামিক গজল/নাশিদ "+(i+1),url:"https://www.youtube.com/results?search_query="+encodeURIComponent("বাংলা ইসলামিক গজল নাশিদ অডিও")})); 
+const oldGoj=GJ.slice();GJ.length=0;gojExtra.forEach(x=>GJ.push([x.name,"অনলাইনে শুনতে YouTube-এ অনুসন্ধান খুলুন"]));
+const prevDraw=draw;
+draw=function(){const v=st[st.length-1];if(v&&v[0]==="goj"){ $("back").hidden=false;$("ttl").textContent="ইসলামিক গজল";$("m").innerHTML='<div class="panel"><b>২০টি অনলাইন গজল/নাশিদ খোঁজার তালিকা</b><p class="muted">প্রতিটি লিংক YouTube-এ অনুসন্ধান খুলবে; এটি নির্দিষ্ট অডিও ফাইল নয়। প্রকাশকের অনুমতি ও উপযুক্ততা যাচাই করে নির্দিষ্ট অডিও যুক্ত করতে হবে।</p></div>'+gojExtra.map((x,i)=>`<div class="row"><b>🎵 ${x.name}</b><a class="action" href="${x.url}" target="_blank" rel="noopener">শুনুন</a></div>`).join("");return}prevDraw()};
+</script>
+
+
+<script>
+const drawBeforeGK=draw;
+draw=function(){const v=st[st.length-1];if(v&&v[0]==="gk"){drawBeforeGK();$("m").insertAdjacentHTML("afterbegin",'<div class="panel"><h3>ইসলামিক সাধারণ জ্ঞান — অনলাইন রেফারেন্স</h3><p>কুরআনের বাংলা অনুবাদ ও ইসলামি তথ্য যাচাই করতে নিচের নির্ভরযোগ্য উৎস ব্যবহার করুন।</p><div class="actions"><a class="action" href="https://quranenc.com/bn/home" target="_blank" rel="noopener">কুরআন বাংলা অনুবাদ</a><a class="action" href="https://sunnah.com/" target="_blank" rel="noopener">হাদিস অনুসন্ধান</a><a class="action" href="https://www.nooraniboard.org/" target="_blank" rel="noopener">নূরানী বোর্ড</a></div><p class="muted">শিশুদের শেখানোর আগে প্রতিটি প্রশ্ন-উত্তর শিক্ষক/আলেম দিয়ে যাচাই করুন।</p></div>');return}drawBeforeGK()};
+</script>
+
+<style>
+/* Full-screen authentication gate: the learning app stays hidden until sign-in. */
+body.auth-locked header, body.auth-locked main, body.auth-locked #bar { display:none !important; }
+#loginGate{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;padding:18px;background:linear-gradient(145deg,#073f32,#168567);overflow:auto}
+#loginGate .gate-card{width:min(440px,100%);background:#fffdf5;color:#1d2b26;border-radius:24px;padding:24px;box-shadow:0 16px 50px #0005}
+#loginGate h1{font-size:25px;text-align:center;margin:8px 0}
+#loginGate .gate-sub{text-align:center;color:#52645c;margin:0 0 18px}
+#loginGate label{display:block;font-weight:700;margin:12px 0 5px}
+#loginGate input{width:100%;padding:13px;border:1px solid #b7c8be;border-radius:11px;font:inherit;background:#fff;color:#17251f}
+#loginGate .pass-wrap{display:flex;gap:7px;align-items:center}
+#loginGate .pass-wrap input{flex:1;min-width:0}
+#loginGate button{border:0;border-radius:11px;padding:12px 14px;font:inherit;font-weight:700;cursor:pointer}
+#loginGate .primary{width:100%;background:#0d5c46;color:white;margin-top:14px}
+#loginGate .secondary{background:#e7f2ec;color:#0d5c46}
+#loginGate .linkrow{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:12px}
+#loginGate .linkbtn{background:none;color:#0d5c46;padding:7px 0}
+#loginGate .msg{min-height:24px;margin:12px 0 0;color:#8a3b20;font-size:14px;line-height:1.5}
+#loginGate .brand-mark{text-align:center;font-size:42px}
+#loginGate .gate-tabs{display:flex;gap:8px;margin:16px 0}
+#loginGate .gate-tabs button{flex:1;background:#e7f2ec;color:#0d5c46}
+#loginGate .gate-tabs button.active{background:#0d5c46;color:white}
+</style>
+<div id="loginGate" role="dialog" aria-modal="true" aria-label="নূরানী পাঠশালা লগইন">
+ <div class="gate-card">
+  <div class="brand-mark">📚</div>
+  <h1>নূরানী পাঠশালা</h1>
+  <p class="gate-sub">শেখা শুরু করতে আপনার অ্যাকাউন্টে প্রবেশ করুন</p>
+  <div class="gate-tabs">
+   <button id="gateLoginTab" class="active" type="button" onclick="gateMode('login')">লগইন</button>
+   <button id="gateRegisterTab" type="button" onclick="gateMode('register')">রেজিস্ট্রেশন</button>
+  </div>
+  <form id="gateForm">
+   <label for="gateEmail">ইমেইল</label>
+   <input id="gateEmail" type="email" autocomplete="email" placeholder="আপনার ইমেইল লিখুন" required>
+   <label for="gatePassword">পাসওয়ার্ড</label>
+   <div class="pass-wrap">
+    <input id="gatePassword" type="password" autocomplete="current-password" placeholder="কমপক্ষে ৬ অক্ষর" minlength="6" required>
+    <button class="secondary" type="button" onclick="gateTogglePassword()" aria-label="পাসওয়ার্ড দেখান">👁</button>
+   </div>
+   <div id="gateConfirmWrap" hidden>
+    <label for="gateConfirm">পাসওয়ার্ড আবার লিখুন</label>
+    <input id="gateConfirm" type="password" autocomplete="new-password" minlength="6" placeholder="পাসওয়ার্ড নিশ্চিত করুন">
+   </div>
+   <button class="primary" id="gateSubmit" type="submit">লগইন করুন</button>
+  </form>
+  <div class="linkrow">
+   <button class="linkbtn" id="gateForgot" type="button" onclick="gateForgotPassword()">পাসওয়ার্ড ভুলে গেছেন?</button>
+   <button class="linkbtn" type="button" onclick="gateTogglePassword()">পাসওয়ার্ড দেখুন/লুকান</button>
+  </div>
+  <p class="msg" id="gateMessage" aria-live="polite"></p>
+  <p style="font-size:12px;color:#68776f;text-align:center;margin:10px 0 0">ইমেইল নিশ্চিতকরণ চালু থাকলে রেজিস্ট্রেশনের পর ইনবক্সে আসা লিংকে চাপ দিন।</p>
+ </div>
+</div>
+<script>
+(function(){
+ const gate=document.getElementById('loginGate');
+ const form=document.getElementById('gateForm');
+ const email=document.getElementById('gateEmail');
+ const pass=document.getElementById('gatePassword');
+ const confirm=document.getElementById('gateConfirm');
+ const msg=document.getElementById('gateMessage');
+ let mode='login', recovery=false;
+ function say(t,good){msg.textContent=t;msg.style.color=good?'#176b42':'#8a3b20'}
+ window.gateMode=function(next){
+  mode=next;recovery=false;
+  document.getElementById('gateLoginTab').classList.toggle('active',next==='login');
+  document.getElementById('gateRegisterTab').classList.toggle('active',next==='register');
+  document.getElementById('gateConfirmWrap').hidden=next!=='register';
+  document.getElementById('gateForgot').hidden=next!=='login';
+  document.getElementById('gateSubmit').textContent=next==='login'?'লগইন করুন':'অ্যাকাউন্ট তৈরি করুন';
+  pass.autocomplete=next==='login'?'current-password':'new-password';
+  say('');
+ };
+ window.gateTogglePassword=function(){
+  const visible=pass.type==='password';
+  pass.type=visible?'text':'password';
+  if(!document.getElementById('gateConfirmWrap').hidden)confirm.type=visible?'text':'password';
+ };
+ window.gateForgotPassword=async function(){
+  if(!sb){say('Supabase সংযোগ পাওয়া যায়নি। ইন্টারনেট ও Project Key পরীক্ষা করুন।');return}
+  const e=email.value.trim();
+  if(!e){say('আগে আপনার ইমেইল লিখুন।');email.focus();return}
+  const {error}=await sb.auth.resetPasswordForEmail(e,{redirectTo:location.origin+location.pathname});
+  say(error?error.message:'পাসওয়ার্ড রিসেটের লিংক আপনার ইমেইলে পাঠানো হয়েছে।',!error);
+ };
+ function unlock(){
+  document.body.classList.remove('auth-locked');
+  gate.style.display='none';
+  const splash=document.getElementById('splash');
+  if(splash)splash.remove();
+ }
+ function lock(){
+  document.body.classList.add('auth-locked');
+  gate.style.display='flex';
+  gateMode('login');
+ }
+ form.addEventListener('submit',async function(ev){
+  ev.preventDefault();
+  if(!sb){say('Supabase সংযোগ হয়নি। Project URL ও public anon/publishable key যাচাই করুন।');return}
+  const e=email.value.trim(),p=pass.value;
+  if(mode==='register'){
+   if(p!==confirm.value){say('দুটি পাসওয়ার্ড এক নয়।');return}
+   const {data,error}=await sb.auth.signUp({email:e,password:p,options:{emailRedirectTo:location.origin+location.pathname}});
+   if(error){say(error.message);return}
+   if(data.session){say('রেজিস্ট্রেশন সফল। অ্যাপ খুলছে…',true);unlock()}
+   else say('রেজিস্ট্রেশন সফল। ইমেইলে পাঠানো confirmation link খুলে তারপর লগইন করুন।',true);
+  }else{
+   const {error}=await sb.auth.signInWithPassword({email:e,password:p});
+   if(error){say(error.message);return}
+   say('লগইন সফল। স্বাগতম!',true);unlock();
+  }
+ });
+ // Supabase auth session is checked on every app open; no session means show gate.
+ async function checkSession(){
+  if(!sb){lock();say('Supabase সংযোগ সেটআপ পাওয়া যায়নি। ইন্টারনেট ও কনফিগারেশন পরীক্ষা করুন।');return}
+  const {data,error}=await sb.auth.getSession();
+  if(error||!data.session)lock();else unlock();
+ }
+ if(sb){
+  sb.auth.onAuthStateChange((event,session)=>{
+   if(event==='PASSWORD_RECOVERY'){
+    lock();say('নতুন পাসওয়ার্ড সেট করুন।');mode='newpassword';
+    document.getElementById('gateConfirmWrap').hidden=false;
+    document.getElementById('gateConfirmWrap').querySelector('label').textContent='নতুন পাসওয়ার্ড আবার লিখুন';
+    document.getElementById('gateSubmit').textContent='নতুন পাসওয়ার্ড সংরক্ষণ';
+    form.onsubmit=async function(ev){
+     ev.preventDefault();
+     if(pass.value.length<6||pass.value!==confirm.value){say('দুটি পাসওয়ার্ড মিলিয়ে কমপক্ষে ৬ অক্ষর দিন।');return}
+     const {error}=await sb.auth.updateUser({password:pass.value});
+     if(error){say(error.message);return}
+     say('পাসওয়ার্ড পরিবর্তন হয়েছে। অ্যাপ খুলছে…',true);unlock();
+    };
+   }else if(event==='SIGNED_OUT')lock();
+   else if(session&&event==='SIGNED_IN')unlock();
+  });
+ }
+ checkSession();
+})();
+</script>
+
+</body></html>
