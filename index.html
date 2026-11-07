@@ -1,1 +1,86 @@
-index.html
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0d5c46">
+<title>নূরানী পাঠশালা</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--green:#0d5c46;--green2:#168567;--gold:#f5c542;--bg:#fff8e7;--ink:#1d2b26;--card:#fff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans Bengali",system-ui,sans-serif}
+header{background:var(--green);color:white;padding:15px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:5}
+header button{border:0;background:transparent;color:white;font-size:23px}header strong{font-size:20px;flex:1}
+main{max-width:850px;margin:auto;padding:16px 14px 90px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:13px}
+.tile,.item,.panel{background:var(--card);border:0;border-radius:17px;padding:17px;box-shadow:0 3px 12px #00000012;color:var(--ink)}
+.tile{text-align:center;font:inherit;font-size:18px;font-weight:700;min-height:125px;cursor:pointer}.tile span{display:block;font-size:36px;margin-bottom:8px}
+.item{display:flex;align-items:center;gap:12px;width:100%;margin:9px 0;text-align:left;font:inherit;font-size:17px;cursor:pointer}.item b{flex:1}
+button.primary,.action{background:var(--green);color:white;border:0;border-radius:11px;padding:11px 15px;font:inherit;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block}
+button.gold{background:var(--gold);color:#1d2b26;border:0;border-radius:11px;padding:11px 15px;font:inherit;font-weight:700}
+.small{font-size:13px;color:#65736c}.arabic{font-family:serif;font-size:29px;line-height:1.9;text-align:right;direction:rtl}
+#gate{position:fixed;inset:0;background:linear-gradient(145deg,#073f32,#168567);z-index:20;display:none;align-items:center;justify-content:center;padding:16px;overflow:auto}
+.gatebox{background:#fffdf5;border-radius:22px;padding:23px;width:min(440px,100%);color:#1d2b26}
+.gatebox h1{text-align:center;margin:4px}.gatebox p{text-align:center;color:#637168}
+label{display:block;font-weight:700;margin:12px 0 5px}input{width:100%;padding:13px;border:1px solid #bdc9c1;border-radius:10px;font:inherit}
+.gatebox button{margin-top:12px}.gatebox .primary{width:100%}.tabs{display:flex;gap:8px}.tabs button{flex:1}.tabs .selected{background:var(--green);color:white}
+#message{min-height:24px;font-size:14px;color:#8b3a20;line-height:1.5}
+audio{width:100%;margin-top:10px}.ayah{margin:12px 0}.hidden{display:none!important}
+@media(min-width:700px){main{padding:24px}.tile{min-height:150px;font-size:20px}}
+</style>
+</head>
+<body>
+<header><button id="back" class="hidden" aria-label="পেছনে">←</button><strong id="title">নূরানী পাঠশালা</strong><button id="logout" class="hidden" title="লগআউট">↪</button></header>
+<main id="app"></main>
+<div id="gate">
+ <div class="gatebox">
+  <div style="text-align:center;font-size:42px">📚</div><h1>নূরানী পাঠশালা</h1>
+  <p>শেখা শুরু করতে লগইন করুন অথবা নতুন অ্যাকাউন্ট খুলুন</p>
+  <div class="tabs"><button id="loginTab" class="gold selected">লগইন</button><button id="signupTab" class="gold">রেজিস্ট্রেশন</button></div>
+  <form id="authForm">
+   <label for="email">ইমেইল</label><input id="email" type="email" autocomplete="email" required placeholder="আপনার ইমেইল">
+   <label for="password">পাসওয়ার্ড</label><input id="password" type="password" autocomplete="current-password" minlength="6" required placeholder="কমপক্ষে ৬ অক্ষর">
+   <div id="confirmWrap" class="hidden"><label for="confirm">পাসওয়ার্ড আবার লিখুন</label><input id="confirm" type="password" minlength="6" placeholder="পাসওয়ার্ড নিশ্চিত করুন"></div>
+   <button id="submitAuth" class="primary" type="submit">লগইন করুন</button>
+  </form>
+  <button id="forgot" class="gold" style="width:100%">পাসওয়ার্ড ভুলে গেছেন?</button>
+  <p id="message" aria-live="polite"></p>
+  <p class="small">রেজিস্ট্রেশনের পর ইমেইলে confirmation link এলে সেটি খুলে লগইন করুন।</p>
+ </div>
+</div>
+<script>
+const SUPABASE_URL="https://rwthmscrufhditioatpf.supabase.co";
+const SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ3dGhtc2NydWZoZGl0aW9hdHBmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQwNzU2MDUsImV4cCI6MjEwOTY1MTYwNX0.hSexmFT44SmXXL6yL3D7ViBhhaa9QjE4Gr9E5neP9hw";
+const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+const $=id=>document.getElementById(id);let mode="login",stack=[];
+function msg(t,ok=false){$("message").textContent=t;$("message").style.color=ok?"#176b42":"#8b3a20"}
+function showGate(show){$("gate").style.display=show?"flex":"none";document.querySelector("header").classList.toggle("hidden",show);$("app").classList.toggle("hidden",show)}
+function setMode(m){mode=m;$("loginTab").classList.toggle("selected",m==="login");$("signupTab").classList.toggle("selected",m==="signup");$("confirmWrap").classList.toggle("hidden",m!=="signup");$("forgot").classList.toggle("hidden",m!=="login");$("submitAuth").textContent=m==="login"?"লগইন করুন":"অ্যাকাউন্ট তৈরি করুন";msg("")}
+$("loginTab").onclick=()=>setMode("login");$("signupTab").onclick=()=>setMode("signup");
+$("authForm").onsubmit=async e=>{e.preventDefault();let email=$("email").value.trim(),password=$("password").value;
+ if(mode==="signup"){if(password!==$("confirm").value)return msg("দুটি পাসওয়ার্ড এক নয়।");let{data,error}=await sb.auth.signUp({email,password,options:{emailRedirectTo:location.origin}});if(error)return msg(error.message);msg(data.session?"রেজিস্ট্রেশন সফল।":"রেজিস্ট্রেশন সফল। ইমেইলের confirmation link খুলে তারপর লগইন করুন।",true);if(data.session)showGate(false)}
+ else{let{error}=await sb.auth.signInWithPassword({email,password});if(error)return msg(error.message);msg("লগইন সফল।",true);showGate(false)}
+};
+$("forgot").onclick=async()=>{let email=$("email").value.trim();if(!email)return msg("আগে ইমেইল লিখুন।");let{error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:location.origin});msg(error?error.message:"পাসওয়ার্ড রিসেটের লিংক ইমেইলে পাঠানো হয়েছে।",!error)};
+$("logout").onclick=async()=>{await sb.auth.signOut()};
+sb.auth.onAuthStateChange((event,session)=>{if(event==="SIGNED_OUT")showGate(true);if(session)showGate(false)});
+async function init(){let{data}=await sb.auth.getSession();showGate(!data.session);if(data.session)renderHome()}
+const categories=[["নূরানী প্রাইমারি","📚"],["আরবি শিক্ষা","🕌"],["কুরআন শরীফ","📖"],["সাধারণ জ্ঞান","💡"],["গজল ও নাশিদ","🎵"],["নামাজ শিক্ষা","🕋"]];
+function go(title,html){stack.push({title,html:$("app").innerHTML});$("title").textContent=title;$("back").classList.remove("hidden");$("app").innerHTML=html}
+$("back").onclick=()=>{let p=stack.pop();$("title").textContent=p? p.title:"নূরানী পাঠশালা";$("app").innerHTML=p?p.html:"";$("back").classList.toggle("hidden",!stack.length);bindDynamic()};
+function renderHome(){$("logout").classList.remove("hidden");$("back").classList.add("hidden");$("title").textContent="নূরানী পাঠশালা";$("app").innerHTML='<div class="panel" style="margin-bottom:14px;text-align:center"><h2>بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</h2><h2>নূরানী পাঠশালায় স্বাগতম</h2><p>শিশুদের সহজভাবে দ্বীনি ও সাধারণ শিক্ষা</p></div><div class="grid">'+categories.map((c,i)=>`<button class="tile" data-cat="${i}"><span>${c[1]}</span>${c[0]}</button>`).join("")+'</div>';$("app").querySelectorAll("[data-cat]").forEach(b=>b.onclick=()=>openCategory(+b.dataset.cat))}
+function openCategory(i){
+ if(i===0){go("নূরানী প্রাইমারি",'<div class="panel"><b>শ্রেণি নির্বাচন করুন</b><p>প্লে, নার্সারি ও প্রথম থেকে তৃতীয় শ্রেণির বিষয়ভিত্তিক বিভাগ। বইয়ের পূর্ণ পাঠ/অডিও যুক্ত করতে সংশ্লিষ্ট বোর্ডের অনুমোদিত উপকরণ প্রয়োজন।</p><p><a class="action" target="_blank" href="https://www.nooraniboard.org/">নূরানী বোর্ডের ওয়েবসাইট</a></p></div>'+["প্লে","নার্সারি","প্রথম শ্রেণি","দ্বিতীয় শ্রেণি","তৃতীয় শ্রেণি"].map(x=>`<button class="item" data-class="${x}"><b>📘 ${x}</b>›</button>`).join(""));$("app").querySelectorAll("[data-class]").forEach(b=>b.onclick=()=>go(b.dataset.class,["আরবি","বাংলা","ইংরেজি","গণিত","দ্বীনিয়াত"].map(s=>`<div class="item"><b>${s}</b><span class="small">পাঠ যোগ করার বিভাগ</span></div>`).join("")))}
+ if(i===1){let letters=[["ا","আলিফ"],["ب","বা"],["ت","তা"],["ث","ছা"],["ج","জীম"],["ح","হা"],["خ","খা"],["د","দাল"],["ذ","যাল"],["ر","রা"],["ز","যা"],["س","সীন"],["ش","শীন"],["ص","সোয়াদ"],["ض","দোয়াদ"],["ط","তোয়া"],["ظ","যোয়া"],["ع","আইন"],["غ","গাইন"],["ف","ফা"],["ق","ক্বাফ"],["ك","কাফ"],["ل","লাম"],["م","মীম"],["ن","নূন"],["و","ওয়াও"],["ه","হা"],["ي","ইয়া"]];go("আরবি শিক্ষা",'<div class="panel">অক্ষরে চাপ দিলে নাম শোনা যাবে। সঠিক মাখরাজ শেখার জন্য শিক্ষকের কাছে অনুশীলন জরুরি।</div><div class="grid">'+letters.map(x=>`<button class="tile" onclick="speak('${x[1]}','bn-BD')"><span class="arabic">${x[0]}</span>${x[1]}</button>`).join("")+'</div>')}
+ if(i===2){go("কুরআন শরীফ",'<div class="panel"><b>সম্পূর্ণ কুরআন — ৩০ পারা</b><p>আরবি পাঠ, বাংলা অনুবাদ ও আল-আফাসির তিলাওয়াত অনলাইনে লোড হবে। ইন্টারনেট প্রয়োজন।</p></div><div class="grid">'+Array.from({length:30},(_,n)=>`<button class="tile" onclick="loadJuz(${n+1})"><span>📖</span>পারা ${n+1}</button>`).join("")+'</div><div id="qresult"></div>')}
+ if(i===3){go("সাধারণ জ্ঞান",'<div class="panel"><h3>শিশুদের সাধারণ জ্ঞান</h3>'+[["বাংলাদেশের রাজধানী","ঢাকা"],["জাতীয় ফুল","শাপলা"],["জাতীয় ফল","কাঁঠাল"],["সপ্তাহে দিন","৭ দিন"],["আরবি মাস","১২টি"],["ইসলামের স্তম্ভ","৫টি"]].map(x=>`<p><b>${x[0]}:</b> ${x[1]}</p>`).join("")+'<p class="small">ইসলামি তথ্য শেখানোর আগে শিক্ষক/আলেমের মাধ্যমে যাচাই করুন।</p></div>')}
+ if(i===4){go("গজল ও নাশিদ",'<div class="panel"><p>নিচের লিংকগুলো বাংলা ইসলামিক গজল/নাশিদ খুঁজে দেবে। এগুলো নির্দিষ্ট অডিও ফাইল নয়।</p></div>'+Array.from({length:20},(_,n)=>`<a class="item" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=${encodeURIComponent("বাংলা ইসলামিক গজল নাশিদ অডিও")}"><b>🎵 গজল/নাশিদ ${n+1}</b><span>শুনুন ↗</span></a>`).join(""))}
+ if(i===5){go("নামাজ শিক্ষা",'<div class="panel"><h3>নামাজের ধাপসমূহ</h3><p>নিচের ধাপগুলো সাধারণ শিক্ষামূলক সারাংশ। মাজহাবভেদে কিছু আমলের পদ্ধতিতে পার্থক্য থাকতে পারে।</p></div>'+[["১. নিয়ত ও কিবলামুখী দাঁড়ানো","অন্তরে নামাজের সংকল্প করে কিবলার দিকে দাঁড়ান।"],["২. তাকবিরে তাহরিমা","আল্লাহু আকবার বলে নামাজ শুরু করুন।"],["৩. কিয়াম ও কিরাআত","সানা, সূরা ফাতিহা এবং কুরআনের অংশ পড়ুন।"],["৪. রুকু","আল্লাহু আকবার বলে রুকুতে যান এবং তাসবিহ পড়ুন।"],["৫. সিজদা","সাত অঙ্গের ওপর সিজদা করুন এবং তাসবিহ পড়ুন।"],["৬. বৈঠক ও সালাম","শেষ বৈঠকে তাশাহহুদ, দরুদ, দোয়া পড়ে সালাম ফিরান।"]].map(x=>`<div class="item" style="display:block"><b>${x[0]}</b><p>${x[1]}</p></div>`).join(""))}
+ bindDynamic()
+}
+function speak(t,lang){if(!("speechSynthesis"in window))return; speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(t);u.lang=lang;u.rate=.75;speechSynthesis.speak(u)}
+async function loadJuz(n){let out=$("qresult");out.innerHTML='<div class="panel">পারা লোড হচ্ছে…</div>';try{let r=await fetch(`https://api.alquran.cloud/v1/juz/${n}/editions/quran-uthmani,bn.bengali,ar.alafasy`);if(!r.ok)throw Error("API "+r.status);let j=await r.json();if(j.code!==200)throw Error("তথ্য পাওয়া যায়নি");let d=j.data,ar=d.find(x=>x.edition.identifier==="quran-uthmani"),bn=d.find(x=>x.edition.identifier==="bn.bengali"),au=d.find(x=>x.edition.identifier==="ar.alafasy");out.innerHTML=`<div class="panel"><h3>পারা ${n}</h3></div>`+ar.ayahs.map((a,k)=>`<div class="panel ayah"><div class="small">${a.surah.englishName} — আয়াত ${a.numberInSurah}</div><div class="arabic">${a.text}</div><p>${bn?.ayahs[k]?.text||"অনুবাদ পাওয়া যায়নি"}</p>${au?.ayahs[k]?.audio?`<audio controls preload="none" src="${au.ayahs[k].audio}"></audio>`:""}</div>`).join("")}catch(e){out.innerHTML='<div class="panel">কুরআনের তথ্য লোড হয়নি। ইন্টারনেট সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।</div>'}}
+function bindDynamic(){}
+init();
+</script>
+</body>
+</html>
